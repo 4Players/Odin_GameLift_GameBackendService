@@ -12,6 +12,8 @@ const {GameLiftClient, SearchGameSessionsCommand, CreateGameSessionCommand, Term
 
 const FleetID = "";
 const Location = "";
+const AWSRegion = "";
+const GCloudRegion = "";
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
@@ -23,14 +25,14 @@ const Location = "";
 
 
 const gameLiftClient = new GameLiftClient({
-    region:"eu-central-1",
+    region:Region,
     credentials:{
         accessKeyId:"",
         secretAccessKey:""
     }
 });
 
-exports.GameLiftSearchSessions = onRequest({region:"europe-west3"},async(req,res)=>{
+exports.GameLiftSearchSessions = onRequest({region:GCloudRegion},async(req,res)=>{
 
     const SearchInput = {
         FleetId:FleetID,
@@ -41,7 +43,7 @@ exports.GameLiftSearchSessions = onRequest({region:"europe-west3"},async(req,res
     return;
 });
 
-exports.GameLiftCloseGameSession = onRequest({region:"europe-west3"},async (req, res) =>{
+exports.GameLiftCloseGameSession = onRequest({region:GCloudRegion},async (req, res) =>{
 
     if(req.body.GameSessionId === undefined){
         res.status(401).send("Missing GameSessionId");
@@ -56,7 +58,7 @@ exports.GameLiftCloseGameSession = onRequest({region:"europe-west3"},async (req,
     await executeCommand(res,command);
 });
 
-exports.GameLiftCreateGameSession = onRequest({region:"europe-west3"},async (req,res)=>{
+exports.GameLiftCreateGameSession = onRequest({region:GCloudRegion},async (req,res)=>{
     if(req.body.CreatorId === undefined){
         res.status(401).send("Missing CreatorId");
         return;
@@ -102,7 +104,7 @@ async function createPlayerSession(GameSessionId,PlayerId,PlayerData){
     return;
 }
 
-exports.GameLiftCreatePlayerSession = onRequest({region:"europe-west3"},async (req,res)=>{
+exports.GameLiftCreatePlayerSession = onRequest({region:GCloudRegion},async (req,res)=>{
     if(req.body.PlayerID == undefined){
         res.status(401).send("Missing PlayerID");
         return;
