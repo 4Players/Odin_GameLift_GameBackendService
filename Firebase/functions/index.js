@@ -8,27 +8,19 @@
  */
 
 const {onRequest} = require("firebase-functions/v2/https");
-const {GameLiftClient, SearchGameSessionsCommand, CreateGameSessionCommand, TerminateGameSessionCommand} = require('@aws-sdk/client-gamelift');
-
-const FleetID = "";
-const Location = "";
-const AWSRegion = "";
-const GCloudRegion = "";
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
-
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+const {GameLiftClient, SearchGameSessionsCommand, CreateGameSessionCommand, TerminateGameSessionCommand, FleetCapacityExceededException} = require('@aws-sdk/client-gamelift');
 
 
+const AWSRegion = "<your-aws-region>";
+const GCloudRegion = "<your-gcloud-region>";
+const FleetID = "<your-fleet-id>";
+const Location = "<your-custom-location>";
 
 const gameLiftClient = new GameLiftClient({
-    region:Region,
+    region:AWSRegion,
     credentials:{
-        accessKeyId:"",
-        secretAccessKey:""
+        accessKeyId:"<your-access-key-id>",
+        secretAccessKey:"<your-access-key>"
     }
 });
 
@@ -87,8 +79,12 @@ async function executeCommand(res,command){
         return;
     } catch (error) {
         console.error(error);
-        res.status(400).send(error);
-        throw error;
+        if(error instanceof FleetCapacityExceededException){
+            res.status(403).send("FleetCapacityExceededException");
+        }else{
+            res.status(400).send("An error occured");
+        }
+        return;
     }
 }
 async function createPlayerSession(GameSessionId,PlayerId,PlayerData){
