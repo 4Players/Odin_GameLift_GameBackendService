@@ -8,4 +8,14 @@ The backend exposes secure HTTP endpoints for creating, searching, and managing 
 
 The implementation is designed for Google Cloud Functions, but can be adapted to any Node.js-based serverless or containerized environment. Together with the main Odin_Gamelift repository, this backend forms a complete example of how to combine Odin Fleet’s dedicated server hosting with GameLift’s matchmaking and session management capabilities.
 
+## Why ODIN Fleet?
+
 [Odin Fleet](https://odin.4players.io/fleet/) is a managed hosting platform for running dedicated game servers at scale. It provides on-demand server instances, automatic deployment via Docker images, and integrated monitoring. By running your dedicated server on Odin Fleet and connecting it to GameLift Anywhere, you can use Odin Fleet for compute while relying on GameLift for matchmaking, session management, and player orchestration.
+
+## More Information and Documentation
+
+For detailed guides on setting up the AWS environment and configuring your ODIN server fleets, check the following:
+
+- [More Information on ODIN Fleet](https://docs.4players.io/fleet/)
+- [ODIN Fleet and AWS GameLift Anywhere integration guide](https://docs.4players.io/fleet/guides/gamelift-anywhere/)
+- [ODIN Fleet and FlexMatch integration guide](https://docs.4players.io/fleet/guides/gamelift-flexmatch/)
