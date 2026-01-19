@@ -2,7 +2,7 @@
 # OdinFleet GameLift Backend Service
 
 This repository provides a minimal backend service that works together with the Unreal Engine dedicated server described in the accompanying Odin_Gamelift project:
-https://github.com/unterpunkt9/Odin_Gamelift
+https://github.com/4Players/OdinFleet_GameLift_Unreal
 
 The backend exposes secure HTTP endpoints for creating, searching, and managing GameLift game sessions. Since GameLift credentials should never be embedded in the game client, this service acts as the gateway between the client and Amazon GameLift Anywhere. It uses the AWS GameLift Client SDK to issue commands such as `SearchGameSessions`, `CreateGameSession`, and `TerminateGameSession`.
 
