@@ -6,7 +6,14 @@ https://github.com/4Players/OdinFleet_GameLift_Unreal
 
 The backend exposes secure HTTP endpoints for creating, searching, and managing GameLift game sessions. Since GameLift credentials should never be embedded in the game client, this service acts as the gateway between the client and Amazon GameLift Anywhere. It uses the AWS GameLift Client SDK to issue commands such as `SearchGameSessions`, `CreateGameSession`, and `TerminateGameSession`.
 
-The implementation is designed for Google Cloud Functions, but can be adapted to any Node.js-based serverless or containerized environment. Together with the main Odin_Gamelift repository, this backend forms a complete example of how to combine Odin Fleet’s dedicated server hosting with GameLift’s matchmaking and session management capabilities.
+The implementation is designed for Google Cloud Functions, but can be adapted to any Node.js-based serverless or containerized environment. Together with the main Odin_Gamelift repository, this backend forms a complete example of how to combine Odin Fleet's dedicated server hosting with GameLift's matchmaking and session management capabilities.
+
+## Accessing Other Versions
+
+Specific versions of this service are available via the following branches and tags:
+
+* **FlexMatch Integration:** Use the `main` branch (tag [`v2-aws-flexmatch-matchmaking`](https://github.com/4Players/Odin_GameLift_GameBackendService/releases/tag/v2-aws-flexmatch-matchmaking)) for the [FlexMatch guide](https://docs.4players.io/fleet/guides/gamelift-flexmatch/).
+* **GameLift Anywhere Integration:** Use the `aws-gamelift-anywhere` branch (tag [`v1-aws-gamelift-anywhere-guide`](https://github.com/4Players/Odin_GameLift_GameBackendService/releases/tag/v1-aws-gamelift-anywhere-guide)) for the [Anywhere guide](https://docs.4players.io/fleet/guides/gamelift-anywhere/).
 
 ## Why ODIN Fleet?
 
