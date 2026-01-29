@@ -10,7 +10,7 @@ The implementation is designed for Google Cloud Functions, but can be adapted to
 
 ## Accessing Other Versions
 
-Specific versions of this service are available via the following branches and tags:
+Specific versions are available via the following branches and tags:
 
 * **FlexMatch Integration:** Use the `main` branch (tag [`v2-aws-flexmatch-matchmaking`](https://github.com/4Players/Odin_GameLift_GameBackendService/releases/tag/v2-aws-flexmatch-matchmaking)) for the [FlexMatch guide](https://docs.4players.io/fleet/guides/gamelift-flexmatch/).
 * **GameLift Anywhere Integration:** Use the `aws-gamelift-anywhere` branch (tag [`v1-aws-gamelift-anywhere-guide`](https://github.com/4Players/Odin_GameLift_GameBackendService/releases/tag/v1-aws-gamelift-anywhere-guide)) for the [Anywhere guide](https://docs.4players.io/fleet/guides/gamelift-anywhere/).
