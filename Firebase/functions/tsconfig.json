@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "es2020",
+        "module": "commonjs",
+        "outDir": "lib",
+        "rootDir": "src",
+        "esModuleInterop": true
+    },
+    "include": ["src/fleet_api_ts/**/*.ts"],
+      "exclude": [
+    "src/fleet_api_ts/index.ts",
+    "src/fleet_api_ts/apis/index.ts",
+    "src/fleet_api_ts/models/index.ts"
+  ]
+}
