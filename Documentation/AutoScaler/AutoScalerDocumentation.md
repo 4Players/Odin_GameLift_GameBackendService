@@ -351,29 +351,26 @@ Integrate the autoscaler straight into your GameLift start matchmaking calls.
 Every time a gamesession is requested, the autoscaler is fired to provision space.
 
 ```js
-exports.GameLiftQueueGameSession = onRequest({region: GCloudRegion}, async (req, res) => {
-    if (req.body.SessionName === undefined) {
+exports.GameLiftQueueGameSession = onRequest({region:GCloudRegion},async (req,res) =>{
+    if(req.body.SessionName === undefined){
         res.status(401).send("Missing SessionName");
         return;
     }
-    if (req.body.PlacementId === undefined) {
+    if(req.body.PlacementId === undefined){
         res.status(401).send("Missing PlacementId");
         return;
     }
-    
     const input = {
-        PlacementId: req.body.PlacementId,
-        GameSessionQueueName: "TestPlacement",
+        PlacementId:req.body.PlacementId,
+        GameSessionQueueName: "<your-placement-queue>",
         MaximumPlayerSessionCount: Number(2),
-        GameSessionName: req.body.SessionName
+        GameSessionName:req.body.SessionName
     };
-    let serverID = await ServerAPI.startServerIfNeeded(appID,locationSettingId,simulate);
-    if(serverID.available == 0){ //if no instance is available, wait until an instance is available
-        if(serverID == -1){
+    let serverID = await ServerAPI.startServerIfNeeded(appID,locationSettingsId);
+
+    if(serverID.available == 0){
+        if(serverID.serverCreated == false && serverID.started.length == 0){
             res.status(500).send("maximum-running-instances"); 
-            return;
-        }else if(serverID == -2){
-            res.status(500).send("odin-flee-server-maximum"); 
             return;
         }
         await tryUntil(result => result == true,async (s)=>{
@@ -384,20 +381,18 @@ exports.GameLiftQueueGameSession = onRequest({region: GCloudRegion}, async (req,
             return false;
         },5000,120000,serverID);
     }
-    
-    const command = new StartGameSessionPlacementCommand(input); //start gamesession
+    const command = new StartGameSessionPlacementCommand(input);
 
     const dbEntry = {
         placementId: input.PlacementId,
         type: "PlacementStarted",
-        Name: input.GameSessionName,
-        startTime: Timestamp.now(),
-        Time: Timestamp.now(),
-    };
-    
+        Name:input.GameSessionName,
+        startTime:Timestamp.now(),
+        Time:Timestamp.now(),
+    }
     await db.collection('GameSessions').doc(input.PlacementId).create(dbEntry);
     
-    let result = await executeCommand(res, command, false);
+    let result = await executeCommand(res,command,false);
     console.log(result);
     res.status(200).send(result); 
     return;
