@@ -15,7 +15,7 @@ Specific versions are available via the following branches and tags:
 * **Autoscaler Integration:** Use the [`main`](https://github.com/4Players/Odin_GameLift_GameBackendService) branch for the [ODIN Fleet Autoscaler guide](https://docs.4players.io/fleet/guides/autoscaler/).
 * **FlexMatch Integration:** Use the [`aws-flexmatch-matchmaking`](https://github.com/4Players/Odin_GameLift_GameBackendService/tree/aws-flexmatch-matchmaking) branch for the [FlexMatch guide](https://docs.4players.io/fleet/guides/gamelift-flexmatch/).
 * **GameLift Anywhere Integration:** Use the [`aws-gamelift-anywhere`](https://github.com/4Players/Odin_GameLift_GameBackendService/tree/aws-gamelift-anywhere) branch for the [Anywhere guide](https://docs.4players.io/fleet/guides/gamelift-anywhere/).
-* **Custom Autoscaler Integration** Use the `custom-autoscaler`[https://github.com/4Players/Odin_GameLift_GameBackendService/tree/custom-autoscaler] branch for a custom autoscaling implementation. This implementation was superseeded by the ODIN Fleet Autoscaling functionality, but could still be interesting to take a look at, if you need a completely custom solution for your project.
+* **Custom Autoscaler Integration** Use the [`custom-autoscaler`](https://github.com/4Players/Odin_GameLift_GameBackendService/tree/custom-autoscaler) branch for a custom autoscaling implementation. This implementation was superseeded by the ODIN Fleet Autoscaling functionality, but could still be interesting to take a look at, if you need a completely custom solution for your project.
 
 ## Why ODIN Fleet?
 
