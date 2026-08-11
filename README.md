@@ -12,8 +12,10 @@ The implementation is designed for Google Cloud Functions, but can be adapted to
 
 Specific versions are available via the following branches and tags:
 
-* **FlexMatch Integration:** Use the `main` branch (tag [`v2-aws-flexmatch-matchmaking`](https://github.com/4Players/Odin_GameLift_GameBackendService/releases/tag/v2-aws-flexmatch-matchmaking)) for the [FlexMatch guide](https://docs.4players.io/fleet/guides/gamelift-flexmatch/).
-* **GameLift Anywhere Integration:** Use the `aws-gamelift-anywhere` branch (tag [`v1-aws-gamelift-anywhere-guide`](https://github.com/4Players/Odin_GameLift_GameBackendService/releases/tag/v1-aws-gamelift-anywhere-guide)) for the [Anywhere guide](https://docs.4players.io/fleet/guides/gamelift-anywhere/).
+* **Autoscaler Integration:** Use the [`main`](https://github.com/4Players/Odin_GameLift_GameBackendService) branch for the [ODIN Fleet Autoscaler guide](https://docs.4players.io/fleet/guides/autoscaler/).
+* **FlexMatch Integration:** Use the [`aws-flexmatch-matchmaking`](https://github.com/4Players/Odin_GameLift_GameBackendService/tree/aws-flexmatch-matchmaking) branch for the [FlexMatch guide](https://docs.4players.io/fleet/guides/gamelift-flexmatch/).
+* **GameLift Anywhere Integration:** Use the [`aws-gamelift-anywhere`](https://github.com/4Players/Odin_GameLift_GameBackendService/tree/aws-gamelift-anywhere) branch for the [Anywhere guide](https://docs.4players.io/fleet/guides/gamelift-anywhere/).
+* **Custom Autoscaler Integration** Use the `custom-autoscaler`[https://github.com/4Players/Odin_GameLift_GameBackendService/tree/custom-autoscaler] branch for a custom autoscaling implementation. This implementation was superseeded by the ODIN Fleet Autoscaling functionality, but could still be interesting to take a look at, if you need a completely custom solution for your project.
 
 ## Why ODIN Fleet?
 
@@ -26,3 +28,4 @@ For detailed guides on setting up the AWS environment and configuring your ODIN 
 - [More Information on ODIN Fleet](https://docs.4players.io/fleet/)
 - [ODIN Fleet and AWS GameLift Anywhere integration guide](https://docs.4players.io/fleet/guides/gamelift-anywhere/)
 - [ODIN Fleet and FlexMatch integration guide](https://docs.4players.io/fleet/guides/gamelift-flexmatch/)
+- [ODIN Fleet and Autoscaler integration guide](https://docs.4players.io/fleet/guides/autoscaler/)
