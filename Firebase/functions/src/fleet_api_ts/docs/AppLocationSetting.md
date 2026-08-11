@@ -11,15 +11,14 @@ Name | Type
 `appId` | number
 `serverConfigId` | number
 `numInstances` | number
-`autoScalerEnabled` | boolean
-`autoScalerMin` | number
-`autoScalerMax` | number
 `status` | [AppLocationSettingStatus](AppLocationSettingStatus.md)
 `statusMessage` | string
 `maintenance` | boolean
 `inUse` | boolean
 `placement` | [Placement](Placement.md)
 `serverConfig` | [ServerConfig](ServerConfig.md)
+`autoscaling` | [AppLocationSettingAutoscaling](AppLocationSettingAutoscaling.md)
+`metadata` | { [key: string]: any; }
 
 ## Example
 
@@ -33,15 +32,14 @@ const example = {
   "appId": null,
   "serverConfigId": null,
   "numInstances": null,
-  "autoScalerEnabled": null,
-  "autoScalerMin": null,
-  "autoScalerMax": null,
   "status": null,
   "statusMessage": null,
   "maintenance": null,
   "inUse": null,
   "placement": null,
   "serverConfig": null,
+  "autoscaling": null,
+  "metadata": null,
 } satisfies AppLocationSetting
 
 console.log(example)

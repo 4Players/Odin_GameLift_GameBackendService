@@ -14,6 +14,7 @@ Name | Type
 `name` | string
 `status` | string
 `statusMessage` | string
+`dns` | string
 `isBackupable` | boolean
 `isRestorable` | boolean
 `isPending` | boolean
@@ -28,6 +29,7 @@ Name | Type
 `location` | [Location](Location.md)
 `resources` | [ResourcePackage](ResourcePackage.md)
 `backups` | [Array&lt;Backup&gt;](Backup.md)
+`autoscaling` | [DockerServiceAutoscaling](DockerServiceAutoscaling.md)
 `metadata` | { [key: string]: any; }
 `createdAt` | Date
 `updatedAt` | Date
@@ -47,6 +49,7 @@ const example = {
   "name": null,
   "status": null,
   "statusMessage": null,
+  "dns": null,
   "isBackupable": null,
   "isRestorable": null,
   "isPending": null,
@@ -61,6 +64,7 @@ const example = {
   "location": null,
   "resources": null,
   "backups": null,
+  "autoscaling": null,
   "metadata": null,
   "createdAt": null,
   "updatedAt": null,

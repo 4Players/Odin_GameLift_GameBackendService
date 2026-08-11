@@ -6,6 +6,10 @@ All URIs are relative to *https://fleet.4players.io/api*
 |------------- | ------------- | -------------|
 | [**createDockerRegistry**](DockerRegistryApi.md#createdockerregistry) | **POST** /v1/docker-registries | Create a new docker registry |
 | [**deleteDockerRegistry**](DockerRegistryApi.md#deletedockerregistry) | **DELETE** /v1/docker-registries/{dockerRegistry} | Delete a specific docker registry |
+| [**dockerRegistriesMetadataDeleteAll**](DockerRegistryApi.md#dockerregistriesmetadatadeleteall) | **DELETE** /v1/docker-registries/{dockerRegistry}/metadata | Delete all metadata |
+| [**dockerRegistriesMetadataDeleteKeys**](DockerRegistryApi.md#dockerregistriesmetadatadeletekeys) | **DELETE** /v1/docker-registries/{dockerRegistry}/metadata/keys | Delete metadata keys |
+| [**dockerRegistriesMetadataSet**](DockerRegistryApi.md#dockerregistriesmetadataset) | **PUT** /v1/docker-registries/{dockerRegistry}/metadata | Set metadata |
+| [**dockerRegistriesMetadataUpdate**](DockerRegistryApi.md#dockerregistriesmetadataupdate) | **PATCH** /v1/docker-registries/{dockerRegistry}/metadata | Update metadata |
 | [**getDockerRegistries**](DockerRegistryApi.md#getdockerregistries) | **GET** /v1/docker-registries | Show all docker registries |
 | [**getDockerRegistryById**](DockerRegistryApi.md#getdockerregistrybyid) | **GET** /v1/docker-registries/{dockerRegistry} | Display a specific docker registry |
 | [**getTaggedImages**](DockerRegistryApi.md#gettaggedimages) | **GET** /v1/docker-registries/{dockerRegistry}/tagged-images | List all available tagged images |
@@ -150,9 +154,297 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## dockerRegistriesMetadataDeleteAll
+
+> DockerRegistry dockerRegistriesMetadataDeleteAll(dockerRegistry)
+
+Delete all metadata
+
+### Example
+
+```ts
+import {
+  Configuration,
+  DockerRegistryApi,
+} from '';
+import type { DockerRegistriesMetadataDeleteAllRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new DockerRegistryApi();
+
+  const body = {
+    // number | The docker registry ID
+    dockerRegistry: 56,
+  } satisfies DockerRegistriesMetadataDeleteAllRequest;
+
+  try {
+    const data = await api.dockerRegistriesMetadataDeleteAll(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **dockerRegistry** | `number` | The docker registry ID | [Defaults to `undefined`] |
+
+### Return type
+
+[**DockerRegistry**](DockerRegistry.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | &#x60;DockerRegistry&#x60; |  -  |
+| **404** | Not found |  -  |
+| **401** | Unauthenticated |  -  |
+| **403** | Authorization error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## dockerRegistriesMetadataDeleteKeys
+
+> DockerRegistry dockerRegistriesMetadataDeleteKeys(dockerRegistry, metadata)
+
+Delete metadata keys
+
+### Example
+
+```ts
+import {
+  Configuration,
+  DockerRegistryApi,
+} from '';
+import type { DockerRegistriesMetadataDeleteKeysRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new DockerRegistryApi();
+
+  const body = {
+    // number | The docker registry ID
+    dockerRegistry: 56,
+    // Array<string>
+    metadata: ...,
+  } satisfies DockerRegistriesMetadataDeleteKeysRequest;
+
+  try {
+    const data = await api.dockerRegistriesMetadataDeleteKeys(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **dockerRegistry** | `number` | The docker registry ID | [Defaults to `undefined`] |
+| **metadata** | `Array<string>` |  | |
+
+### Return type
+
+[**DockerRegistry**](DockerRegistry.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | &#x60;DockerRegistry&#x60; |  -  |
+| **404** | Not found |  -  |
+| **401** | Unauthenticated |  -  |
+| **422** | Validation error |  -  |
+| **403** | Authorization error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## dockerRegistriesMetadataSet
+
+> DockerRegistry dockerRegistriesMetadataSet(dockerRegistry, setDockerRegistryMetadataRequest)
+
+Set metadata
+
+Replaces the entire metadata.
+
+### Example
+
+```ts
+import {
+  Configuration,
+  DockerRegistryApi,
+} from '';
+import type { DockerRegistriesMetadataSetRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new DockerRegistryApi();
+
+  const body = {
+    // number | The docker registry ID
+    dockerRegistry: 56,
+    // SetDockerRegistryMetadataRequest (optional)
+    setDockerRegistryMetadataRequest: ...,
+  } satisfies DockerRegistriesMetadataSetRequest;
+
+  try {
+    const data = await api.dockerRegistriesMetadataSet(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **dockerRegistry** | `number` | The docker registry ID | [Defaults to `undefined`] |
+| **setDockerRegistryMetadataRequest** | [SetDockerRegistryMetadataRequest](SetDockerRegistryMetadataRequest.md) |  | [Optional] |
+
+### Return type
+
+[**DockerRegistry**](DockerRegistry.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | &#x60;DockerRegistry&#x60; |  -  |
+| **404** | Not found |  -  |
+| **401** | Unauthenticated |  -  |
+| **422** | Validation error |  -  |
+| **403** | Authorization error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## dockerRegistriesMetadataUpdate
+
+> DockerRegistry dockerRegistriesMetadataUpdate(dockerRegistry, patchDockerRegistryMetadataRequest)
+
+Update metadata
+
+Updates existing metadata keys or adds new keys without deleting other metadata.
+
+### Example
+
+```ts
+import {
+  Configuration,
+  DockerRegistryApi,
+} from '';
+import type { DockerRegistriesMetadataUpdateRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new DockerRegistryApi();
+
+  const body = {
+    // number | The docker registry ID
+    dockerRegistry: 56,
+    // PatchDockerRegistryMetadataRequest (optional)
+    patchDockerRegistryMetadataRequest: ...,
+  } satisfies DockerRegistriesMetadataUpdateRequest;
+
+  try {
+    const data = await api.dockerRegistriesMetadataUpdate(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **dockerRegistry** | `number` | The docker registry ID | [Defaults to `undefined`] |
+| **patchDockerRegistryMetadataRequest** | [PatchDockerRegistryMetadataRequest](PatchDockerRegistryMetadataRequest.md) |  | [Optional] |
+
+### Return type
+
+[**DockerRegistry**](DockerRegistry.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | &#x60;DockerRegistry&#x60; |  -  |
+| **404** | Not found |  -  |
+| **401** | Unauthenticated |  -  |
+| **422** | Validation error |  -  |
+| **403** | Authorization error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## getDockerRegistries
 
-> GetDockerRegistries200Response getDockerRegistries(perPage, page, sort, filterId, filterType, filterName, filterNamePartial, filterUrl, filterOrganization)
+> GetDockerRegistries200Response getDockerRegistries(perPage, page, sort, filterId, filterType, filterName, filterNamePartial, filterUrl, filterOrganization, filterMetadata)
 
 Show all docker registries
 
@@ -174,7 +466,7 @@ async function example() {
     perPage: 56,
     // number | Specifies the page number to retrieve in the paginated results. (optional)
     page: 56,
-    // Array<string> | Allows sorting of results. By default, sorting is in ascending order. To reverse the order, prepend the sort key with a hyphen (-).  **Simple Sort:** To sort by id in ascending order or by name in descending order:  ``` sort[]=id sort[]=-name ```  **Multiple Sorts:** Combine multiple sorts by separating them with commas: ``` sort[]=id&sort[]=-name ``` (optional)
+    // Array<'-id' | 'id' | '-type' | 'type' | '-name' | 'name' | '-url' | 'url' | '-organization' | 'organization'> | Allows sorting of results. By default, sorting is in ascending order. To reverse the order, prepend the sort key with a hyphen (-).  **Simple Sort:** To sort by id in ascending order or by name in descending order:  ``` sort[]=id sort[]=-name ```  **Multiple Sorts:** Combine multiple sorts by separating them with commas: ``` sort[]=id&sort[]=-name ``` (optional)
     sort: ...,
     // number | Filter by id. (optional)
     filterId: 56,
@@ -188,6 +480,8 @@ async function example() {
     filterUrl: filterUrl_example,
     // string | Filter by organization. (optional)
     filterOrganization: filterOrganization_example,
+    // string | Filter by metadata. Allows filtering based on metadata key-value pairs, supporting both simple and nested metadata fields using dot notation.  **Simple Filters:** To filter where `idle` is false (boolean): ``` filter[metadata]=idle=false ```  To filter where `string` is exactly \"a\": ``` filter[metadata]=string=\"a\" ```  **Filtering for Null Values:** To filter for a native null value, use unquoted null. For example, to filter where `score` is null: ``` filter[metadata]=score=null ```  **Nested Filters:** For nested metadata fields use dot notation. For example, to filter where `difficulty` within `gameSettings.survival` is exactly \"hardcore\": ``` filter[metadata]=gameSettings.survival.difficulty=\"hardcore\" ```  To filter for a nested field with a native `null` value, leave the null unquoted: ``` filter[metadata]=gameSettings.stats.score=null ```  **Array Contains Filter:** To filter where an array contains a given value (string, number, boolean or null): ``` filter[metadata]=players=\"foobar\" filter[metadata]=player_ids=37 filter[metadata]=array=true filter[metadata]=array=null ```  Works for nested arrays as well: ``` filter[metadata]=gameData.players=\"foobar\" ```  **Multiple Filters:** Combine multiple filters by separating them with commas: ``` filter[metadata]=idle=false,max_players=20,gameSettings.survival.difficulty=\"hardcore\" ``` (optional)
+    filterMetadata: filterMetadata_example,
   } satisfies GetDockerRegistriesRequest;
 
   try {
@@ -209,13 +503,14 @@ example().catch(console.error);
 |------------- | ------------- | ------------- | -------------|
 | **perPage** | `number` | The number of items to be shown per page. | [Optional] [Defaults to `undefined`] |
 | **page** | `number` | Specifies the page number to retrieve in the paginated results. | [Optional] [Defaults to `undefined`] |
-| **sort** | `Array<string>` | Allows sorting of results. By default, sorting is in ascending order. To reverse the order, prepend the sort key with a hyphen (-).  **Simple Sort:** To sort by id in ascending order or by name in descending order:  &#x60;&#x60;&#x60; sort[]&#x3D;id sort[]&#x3D;-name &#x60;&#x60;&#x60;  **Multiple Sorts:** Combine multiple sorts by separating them with commas: &#x60;&#x60;&#x60; sort[]&#x3D;id&amp;sort[]&#x3D;-name &#x60;&#x60;&#x60; | [Optional] |
+| **sort** | `-id`, `id`, `-type`, `type`, `-name`, `name`, `-url`, `url`, `-organization`, `organization` | Allows sorting of results. By default, sorting is in ascending order. To reverse the order, prepend the sort key with a hyphen (-).  **Simple Sort:** To sort by id in ascending order or by name in descending order:  &#x60;&#x60;&#x60; sort[]&#x3D;id sort[]&#x3D;-name &#x60;&#x60;&#x60;  **Multiple Sorts:** Combine multiple sorts by separating them with commas: &#x60;&#x60;&#x60; sort[]&#x3D;id&amp;sort[]&#x3D;-name &#x60;&#x60;&#x60; | [Optional] [Enum: -id, id, -type, type, -name, name, -url, url, -organization, organization] |
 | **filterId** | `number` | Filter by id. | [Optional] [Defaults to `undefined`] |
 | **filterType** | `string` | Filter by type. | [Optional] [Defaults to `undefined`] |
 | **filterName** | `string` | Filter by name. | [Optional] [Defaults to `undefined`] |
 | **filterNamePartial** | `string` | Filter by name using partial matching. For example, \&quot;ann\&quot; matches \&quot;Joanna\&quot; or \&quot;Annie\&quot;. | [Optional] [Defaults to `undefined`] |
 | **filterUrl** | `string` | Filter by url. | [Optional] [Defaults to `undefined`] |
 | **filterOrganization** | `string` | Filter by organization. | [Optional] [Defaults to `undefined`] |
+| **filterMetadata** | `string` | Filter by metadata. Allows filtering based on metadata key-value pairs, supporting both simple and nested metadata fields using dot notation.  **Simple Filters:** To filter where &#x60;idle&#x60; is false (boolean): &#x60;&#x60;&#x60; filter[metadata]&#x3D;idle&#x3D;false &#x60;&#x60;&#x60;  To filter where &#x60;string&#x60; is exactly \&quot;a\&quot;: &#x60;&#x60;&#x60; filter[metadata]&#x3D;string&#x3D;\&quot;a\&quot; &#x60;&#x60;&#x60;  **Filtering for Null Values:** To filter for a native null value, use unquoted null. For example, to filter where &#x60;score&#x60; is null: &#x60;&#x60;&#x60; filter[metadata]&#x3D;score&#x3D;null &#x60;&#x60;&#x60;  **Nested Filters:** For nested metadata fields use dot notation. For example, to filter where &#x60;difficulty&#x60; within &#x60;gameSettings.survival&#x60; is exactly \&quot;hardcore\&quot;: &#x60;&#x60;&#x60; filter[metadata]&#x3D;gameSettings.survival.difficulty&#x3D;\&quot;hardcore\&quot; &#x60;&#x60;&#x60;  To filter for a nested field with a native &#x60;null&#x60; value, leave the null unquoted: &#x60;&#x60;&#x60; filter[metadata]&#x3D;gameSettings.stats.score&#x3D;null &#x60;&#x60;&#x60;  **Array Contains Filter:** To filter where an array contains a given value (string, number, boolean or null): &#x60;&#x60;&#x60; filter[metadata]&#x3D;players&#x3D;\&quot;foobar\&quot; filter[metadata]&#x3D;player_ids&#x3D;37 filter[metadata]&#x3D;array&#x3D;true filter[metadata]&#x3D;array&#x3D;null &#x60;&#x60;&#x60;  Works for nested arrays as well: &#x60;&#x60;&#x60; filter[metadata]&#x3D;gameData.players&#x3D;\&quot;foobar\&quot; &#x60;&#x60;&#x60;  **Multiple Filters:** Combine multiple filters by separating them with commas: &#x60;&#x60;&#x60; filter[metadata]&#x3D;idle&#x3D;false,max_players&#x3D;20,gameSettings.survival.difficulty&#x3D;\&quot;hardcore\&quot; &#x60;&#x60;&#x60; | [Optional] [Defaults to `undefined`] |
 
 ### Return type
 

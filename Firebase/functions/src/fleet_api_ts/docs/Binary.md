@@ -20,6 +20,7 @@ Name | Type
 `inUse` | boolean
 `dockerImage` | [DockerImage](DockerImage.md)
 `steam` | [Steam](Steam.md)
+`metadata` | { [key: string]: any; }
 
 ## Example
 
@@ -42,6 +43,7 @@ const example = {
   "inUse": null,
   "dockerImage": null,
   "steam": null,
+  "metadata": null,
 } satisfies Binary
 
 console.log(example)

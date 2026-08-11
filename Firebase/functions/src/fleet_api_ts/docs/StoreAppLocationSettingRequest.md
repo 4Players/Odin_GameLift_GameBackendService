@@ -11,6 +11,7 @@ Name | Type
 `numInstances` | number
 `placement` | [CreateUpdatePlacement](CreateUpdatePlacement.md)
 `password` | string
+`autoscaling` | [CreateUpdateAutoscaling](CreateUpdateAutoscaling.md)
 
 ## Example
 
@@ -24,6 +25,7 @@ const example = {
   "numInstances": null,
   "placement": null,
   "password": null,
+  "autoscaling": null,
 } satisfies StoreAppLocationSettingRequest
 
 console.log(example)

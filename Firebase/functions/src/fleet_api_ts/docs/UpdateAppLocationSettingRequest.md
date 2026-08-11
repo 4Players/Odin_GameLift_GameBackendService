@@ -8,6 +8,7 @@ Name | Type
 ------------ | -------------
 `name` | string
 `numInstances` | number
+`autoscaling` | [CreateUpdateAutoscaling](CreateUpdateAutoscaling.md)
 
 ## Example
 
@@ -18,6 +19,7 @@ import type { UpdateAppLocationSettingRequest } from ''
 const example = {
   "name": null,
   "numInstances": null,
+  "autoscaling": null,
 } satisfies UpdateAppLocationSettingRequest
 
 console.log(example)

@@ -101,7 +101,7 @@ async function example() {
     perPage: 56,
     // number | Specifies the page number to retrieve in the paginated results. (optional)
     page: 56,
-    // Array<string> | Allows sorting of results. By default, sorting is in ascending order. To reverse the order, prepend the sort key with a hyphen (-).  **Simple Sort:** To sort by id in ascending order or by name in descending order:  ``` sort[]=id sort[]=-name ```  **Multiple Sorts:** Combine multiple sorts by separating them with commas: ``` sort[]=id&sort[]=-name ``` (optional)
+    // Array<'-id' | 'id' | '-name' | 'name' | '-slug' | 'slug' | '-type' | 'type' | '-cpuLimit' | 'cpuLimit' | '-memoryLimitMiB' | 'memoryLimitMiB'> | Allows sorting of results. By default, sorting is in ascending order. To reverse the order, prepend the sort key with a hyphen (-).  **Simple Sort:** To sort by id in ascending order or by name in descending order:  ``` sort[]=id sort[]=-name ```  **Multiple Sorts:** Combine multiple sorts by separating them with commas: ``` sort[]=id&sort[]=-name ``` (optional)
     sort: ...,
     // number | Filter by id. (optional)
     filterId: 56,
@@ -138,7 +138,7 @@ example().catch(console.error);
 |------------- | ------------- | ------------- | -------------|
 | **perPage** | `number` | The number of items to be shown per page. | [Optional] [Defaults to `undefined`] |
 | **page** | `number` | Specifies the page number to retrieve in the paginated results. | [Optional] [Defaults to `undefined`] |
-| **sort** | `Array<string>` | Allows sorting of results. By default, sorting is in ascending order. To reverse the order, prepend the sort key with a hyphen (-).  **Simple Sort:** To sort by id in ascending order or by name in descending order:  &#x60;&#x60;&#x60; sort[]&#x3D;id sort[]&#x3D;-name &#x60;&#x60;&#x60;  **Multiple Sorts:** Combine multiple sorts by separating them with commas: &#x60;&#x60;&#x60; sort[]&#x3D;id&amp;sort[]&#x3D;-name &#x60;&#x60;&#x60; | [Optional] |
+| **sort** | `-id`, `id`, `-name`, `name`, `-slug`, `slug`, `-type`, `type`, `-cpuLimit`, `cpuLimit`, `-memoryLimitMiB`, `memoryLimitMiB` | Allows sorting of results. By default, sorting is in ascending order. To reverse the order, prepend the sort key with a hyphen (-).  **Simple Sort:** To sort by id in ascending order or by name in descending order:  &#x60;&#x60;&#x60; sort[]&#x3D;id sort[]&#x3D;-name &#x60;&#x60;&#x60;  **Multiple Sorts:** Combine multiple sorts by separating them with commas: &#x60;&#x60;&#x60; sort[]&#x3D;id&amp;sort[]&#x3D;-name &#x60;&#x60;&#x60; | [Optional] [Enum: -id, id, -name, name, -slug, slug, -type, type, -cpuLimit, cpuLimit, -memoryLimitMiB, memoryLimitMiB] |
 | **filterId** | `number` | Filter by id. | [Optional] [Defaults to `undefined`] |
 | **filterName** | `string` | Filter by name. | [Optional] [Defaults to `undefined`] |
 | **filterNamePartial** | `string` | Filter by name using partial matching. For example, \&quot;ann\&quot; matches \&quot;Joanna\&quot; or \&quot;Annie\&quot;. | [Optional] [Defaults to `undefined`] |

@@ -4,14 +4,15 @@ All URIs are relative to *https://fleet.4players.io/api*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**templateAppMinecraftStore**](TemplatesApi.md#templateappminecraftstore) | **POST** /v1/templates/apps/minecraft | Create a Minecraft template app |
-| [**templateAppPalworldStore**](TemplatesApi.md#templateapppalworldstore) | **POST** /v1/templates/apps/palworld | Create a Palworld template app |
+| [**createMinecraftTemplate**](TemplatesApi.md#createminecrafttemplate) | **POST** /v1/templates/apps/minecraft | Create a Minecraft template app |
+| [**createOpenClawTemplate**](TemplatesApi.md#createopenclawtemplate) | **POST** /v1/templates/apps/openclaw | Create an OpenClaw template app |
+| [**createPalworldTemplate**](TemplatesApi.md#createpalworldtemplate) | **POST** /v1/templates/apps/palworld | Create a Palworld template app |
 
 
 
-## templateAppMinecraftStore
+## createMinecraftTemplate
 
-> App templateAppMinecraftStore(storeMinecraftTemplateRequest)
+> App createMinecraftTemplate(storeMinecraftTemplateRequest)
 
 Create a Minecraft template app
 
@@ -22,7 +23,7 @@ import {
   Configuration,
   TemplatesApi,
 } from '';
-import type { TemplateAppMinecraftStoreRequest } from '';
+import type { CreateMinecraftTemplateRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -31,10 +32,10 @@ async function example() {
   const body = {
     // StoreMinecraftTemplateRequest (optional)
     storeMinecraftTemplateRequest: ...,
-  } satisfies TemplateAppMinecraftStoreRequest;
+  } satisfies CreateMinecraftTemplateRequest;
 
   try {
-    const data = await api.templateAppMinecraftStore(body);
+    const data = await api.createMinecraftTemplate(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -77,9 +78,78 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## templateAppPalworldStore
+## createOpenClawTemplate
 
-> App templateAppPalworldStore(storePalworldTemplateRequest)
+> TemplateAppResult createOpenClawTemplate(storeOpenClawTemplateRequest)
+
+Create an OpenClaw template app
+
+### Example
+
+```ts
+import {
+  Configuration,
+  TemplatesApi,
+} from '';
+import type { CreateOpenClawTemplateRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new TemplatesApi();
+
+  const body = {
+    // StoreOpenClawTemplateRequest (optional)
+    storeOpenClawTemplateRequest: ...,
+  } satisfies CreateOpenClawTemplateRequest;
+
+  try {
+    const data = await api.createOpenClawTemplate(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **storeOpenClawTemplateRequest** | [StoreOpenClawTemplateRequest](StoreOpenClawTemplateRequest.md) |  | [Optional] |
+
+### Return type
+
+[**TemplateAppResult**](TemplateAppResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | &#x60;TemplateAppResult&#x60; |  -  |
+| **401** | Unauthenticated |  -  |
+| **422** | Validation error |  -  |
+| **403** | Authorization error |  -  |
+| **404** | Payment project not found |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## createPalworldTemplate
+
+> App createPalworldTemplate(storePalworldTemplateRequest)
 
 Create a Palworld template app
 
@@ -90,7 +160,7 @@ import {
   Configuration,
   TemplatesApi,
 } from '';
-import type { TemplateAppPalworldStoreRequest } from '';
+import type { CreatePalworldTemplateRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -99,10 +169,10 @@ async function example() {
   const body = {
     // StorePalworldTemplateRequest (optional)
     storePalworldTemplateRequest: ...,
-  } satisfies TemplateAppPalworldStoreRequest;
+  } satisfies CreatePalworldTemplateRequest;
 
   try {
-    const data = await api.templateAppPalworldStore(body);
+    const data = await api.createPalworldTemplate(body);
     console.log(data);
   } catch (error) {
     console.error(error);

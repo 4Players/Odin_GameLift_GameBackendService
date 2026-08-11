@@ -12,12 +12,13 @@ Name | Type
 `notes` | string
 `binaryId` | number
 `resourcePackageSlug` | string
+`dnsServiceEnabled` | boolean
 `configFiles` | [Array&lt;ConfigFile&gt;](ConfigFile.md)
 `secretFiles` | [Array&lt;SecretFile&gt;](SecretFile.md)
 `restartPolicy` | [RestartPolicy](RestartPolicy.md)
 `env` | [Array&lt;EnvironmentVariableDefinition&gt;](EnvironmentVariableDefinition.md)
 `mounts` | [Array&lt;Mount&gt;](Mount.md)
-`ports` | [Array&lt;PortDefinition&gt;](PortDefinition.md)
+`ports` | [Array&lt;PortDefinitionRequest&gt;](PortDefinitionRequest.md)
 
 ## Example
 
@@ -27,11 +28,12 @@ import type { UpdateServerConfigRequest } from ''
 // TODO: Update the object below with actual values
 const example = {
   "name": null,
-  "args": /usr/local/etc/enshrouded/bootstrap,
+  "args": null,
   "command": null,
   "notes": null,
   "binaryId": null,
   "resourcePackageSlug": null,
+  "dnsServiceEnabled": null,
   "configFiles": null,
   "secretFiles": null,
   "restartPolicy": null,

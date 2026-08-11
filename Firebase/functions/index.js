@@ -34,7 +34,7 @@ exports.SetServerActive = onRequest({region:GCloudRegion},async (req,res) =>{
         res.status(401).send("Missing ServerID");
         return;
     }
-    await ServerAPI.setGameSessionStatusForServer(req.body.server_id,"Available");
+    await ServerAPI.setServerStatus(req.body.server_id,"Available");
 });
 
 exports.SetServerGamesessionPending = onRequest({region:GCloudRegion},async(req,res)=>{    
@@ -43,7 +43,7 @@ exports.SetServerGamesessionPending = onRequest({region:GCloudRegion},async(req,
         res.status(401).send("Missing ServerID");
         return;
     }
-    await ServerAPI.setGameSessionStatusForServer(req.body.server_id,"Starting");
+    await ServerAPI.setServerStatus(req.body.server_id,"Starting");
 
 })
 
@@ -54,7 +54,7 @@ exports.SetServerUsed = onRequest({region:GCloudRegion},async (req,res) =>{
         return;
     }
 
-    await ServerAPI.setGameSessionStatusForServer(req.body.server_id,"Started");
+    await ServerAPI.setServerStatus(req.body.server_id,"Started");
     
 });
 
@@ -63,8 +63,10 @@ exports.SetServerShutdown = onRequest({region:GCloudRegion},async (req,res) =>{
         res.status(401).send("Missing ServerID");
         return;
     }
-    await ServerAPI.setGameSessionStatusForServer(req.body.server_id,"Closed");
-    await ServerAPI.stopServer(req.body.server_id);
+    let serverHasAutoscaling = await ServerAPI.setServerStatus(req.body.server_id,"Closed");
+    if(await ServerAPI.autoscalingEnabled(res.body.server_id,ServerAPI.appID)){
+        await ServerAPI.stopServer(req.body.server_id);
+    }
 });
 
 exports.GameLiftSearchSessions = onRequest({region:GCloudRegion},async(req,res)=>{
@@ -132,25 +134,11 @@ exports.GameLiftQueueGameSession = onRequest({region:GCloudRegion},async (req,re
     }
     const input = {
         PlacementId:req.body.PlacementId,
-        GameSessionQueueName: "<your-placement-queue>",
+        GameSessionQueueName: "TestPlacement",
         MaximumPlayerSessionCount: Number(2),
         GameSessionName:req.body.SessionName
     };
-    let serverID = await ServerAPI.startServerIfNeeded(appID,locationSettingsId);
 
-    if(serverID.available == 0){
-        if(serverID.serverCreated == false && serverID.started.length == 0){
-            res.status(500).send("maximum-running-instances"); 
-            return;
-        }
-        await tryUntil(result => result == true,async (s)=>{
-            let availableServerIds = await ServerAPI.getAvailableServerIdsForApp(ServerAPI.appID,false);
-            if(availableServerIds.readyForGameSession.length >= 1){
-                return true;
-            }
-            return false;
-        },5000,120000,serverID);
-    }
     const command = new StartGameSessionPlacementCommand(input);
 
     const dbEntry = {
@@ -335,14 +323,6 @@ exports.GameLiftCreateGameSession = onRequest({region:GCloudRegion},async (req,r
         Name:req.body.SessionName,
         MaximumPlayerSessionCount:Number(2),
     };
-    let serverID = await ServerAPI.startServerIfNeeded();
-    await tryUntil(result => result == true,async ()=>{
-        let doc = await db.collection("Servers").doc(serverID).get();
-        if(doc.get("status") =="Idle"){
-            return true;
-        }
-        return false;
-    },5000,120000);
     const command = new CreateGameSessionCommand(input);
     let commandresult = await executeCommand(res,command,false);
     commandresult.server = serverID;
@@ -369,13 +349,6 @@ async function tryUntil(condition, task, interval, timeout,param){
 
     await sleep(interval);
   }
-}
-
-async function isServerAvailable(){
-    const availableServers = await db.collection("Servers").where("status","==","Idle").get();
-    if(availableServers.empty){
-        ServerAPI.startServerIfNeeded()
-    }
 }
 
 async function executeCommand(res,command,sendOkStatus){

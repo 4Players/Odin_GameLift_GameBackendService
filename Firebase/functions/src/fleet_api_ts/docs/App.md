@@ -13,6 +13,7 @@ Name | Type
 `maintenance` | boolean
 `status` | [AppStatus](AppStatus.md)
 `statusMessage` | string
+`metadata` | { [key: string]: any; }
 
 ## Example
 
@@ -28,6 +29,7 @@ const example = {
   "maintenance": null,
   "status": null,
   "statusMessage": null,
+  "metadata": null,
 } satisfies App
 
 console.log(example)

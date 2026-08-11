@@ -19,7 +19,7 @@ import type { AuthRequest } from ''
 const example = {
   "email": null,
   "password": null,
-  "sid": 1234567890ABCDEFG,
+  "sid": null,
 } satisfies AuthRequest
 
 console.log(example)

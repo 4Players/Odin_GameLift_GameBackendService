@@ -17,6 +17,7 @@ Name | Type
 `organization` | boolean
 `awsAccessKey` | string
 `awsSecretAccessKey` | string
+`metadata` | { [key: string]: any; }
 
 ## Example
 
@@ -36,6 +37,7 @@ const example = {
   "organization": null,
   "awsAccessKey": null,
   "awsSecretAccessKey": null,
+  "metadata": null,
 } satisfies DockerRegistry
 
 console.log(example)

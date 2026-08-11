@@ -10,6 +10,10 @@ Name | Type
 `protocol` | [Protocol](Protocol.md)
 `targetPort` | number
 `publishedPort` | number
+`dnsMode` | [DnsMode](DnsMode.md)
+`dnsPrivate` | boolean
+`dnsHttp` | string
+`dnsHttps` | string
 
 ## Example
 
@@ -22,6 +26,10 @@ const example = {
   "protocol": null,
   "targetPort": null,
   "publishedPort": null,
+  "dnsMode": null,
+  "dnsPrivate": null,
+  "dnsHttp": null,
+  "dnsHttps": null,
 } satisfies Port
 
 console.log(example)

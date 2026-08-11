@@ -18,6 +18,7 @@ Name | Type
 `maintenance` | boolean
 `resourcePackageSlug` | string
 `inUse` | boolean
+`dnsServiceEnabled` | boolean
 `restartPolicy` | [RestartPolicy](RestartPolicy.md)
 `env` | [Array&lt;EnvironmentVariableDefinition&gt;](EnvironmentVariableDefinition.md)
 `mounts` | [Array&lt;Mount&gt;](Mount.md)
@@ -25,6 +26,7 @@ Name | Type
 `configFiles` | [Array&lt;ConfigFile&gt;](ConfigFile.md)
 `secretFiles` | [Array&lt;SecretFile&gt;](SecretFile.md)
 `binary` | [Binary](Binary.md)
+`metadata` | { [key: string]: any; }
 
 ## Example
 
@@ -45,6 +47,7 @@ const example = {
   "maintenance": null,
   "resourcePackageSlug": null,
   "inUse": null,
+  "dnsServiceEnabled": null,
   "restartPolicy": null,
   "env": null,
   "mounts": null,
@@ -52,6 +55,7 @@ const example = {
   "configFiles": null,
   "secretFiles": null,
   "binary": null,
+  "metadata": null,
 } satisfies ServerConfig
 
 console.log(example)

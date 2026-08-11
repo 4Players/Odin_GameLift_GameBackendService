@@ -7,6 +7,7 @@
 Name | Type
 ------------ | -------------
 `message` | string
+`errors` | { [key: string]: Array&lt;string&gt;; }
 
 ## Example
 
@@ -16,6 +17,7 @@ import type { InlineObject } from ''
 // TODO: Update the object below with actual values
 const example = {
   "message": null,
+  "errors": null,
 } satisfies InlineObject
 
 console.log(example)

@@ -6,7 +6,7 @@
 
 Name | Type
 ------------ | -------------
-`data` | [Array&lt;Location&gt;](Location.md)
+`data` | [Array&lt;LocationIndex&gt;](LocationIndex.md)
 `links` | [GetAppLocationSettings200ResponseLinks](GetAppLocationSettings200ResponseLinks.md)
 `meta` | [GetAppLocationSettings200ResponseMeta](GetAppLocationSettings200ResponseMeta.md)
 
