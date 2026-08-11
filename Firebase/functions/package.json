@@ -2,11 +2,13 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "scripts": {
-    "serve": "firebase emulators:start --only functions",
+    "serve": "npm run build:client && firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "deploy": "npm run build:client && firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "build:client": "tsc -p tsconfig.json"
+
   },
   "engines": {
     "node": "20"
@@ -16,10 +18,12 @@
     "@aws-sdk/client-gamelift": "^3.914.0",
     "@aws-sdk/client-s3": "^3.914.0",
     "firebase-admin": "^12.1.0",
-    "firebase-functions": "^5.0.0"
+    "firebase-functions": "^5.0.0",
+    "@reneup9/odin_fleet_api": "file:src/fleet_api_ts"
   },
   "devDependencies": {
-    "firebase-functions-test": "^3.1.0"
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^5.9.3"
   },
   "private": true
 }

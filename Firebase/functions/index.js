@@ -8,9 +8,13 @@
  */
 
 const {onRequest} = require("firebase-functions/v2/https");
-const {GameLiftClient, SearchGameSessionsCommand, CreateGameSessionCommand, TerminateGameSessionCommand, FleetCapacityExceededException} = require('@aws-sdk/client-gamelift');
+const {GameLiftClient, SearchGameSessionsCommand, CreateGameSessionCommand,DescribeGameSessionPlacementCommand , TerminateGameSessionCommand, FleetCapacityExceededException, StartGameSessionPlacementCommand, CreatePlayerSessionCommand, StartMatchmakingCommand, DescribeMatchmakingCommand, StopMatchmakingCommand} = require('@aws-sdk/client-gamelift');
+const FirebaseApp = require("./firebaseApp.cjs");
+const { Timestamp } = require("firebase-admin/firestore");
 
+const ServerAPI = require("./serverAPI.cjs");
 
+const db = FirebaseApp.db;
 const AWSRegion = "<your-aws-region>";
 const GCloudRegion = "<your-gcloud-region>";
 const FleetID = "<your-fleet-id>";
@@ -24,14 +28,76 @@ const gameLiftClient = new GameLiftClient({
     }
 });
 
+
+exports.SetServerActive = onRequest({region:GCloudRegion},async (req,res) =>{
+    if(req.body.server_id === undefined){
+        res.status(401).send("Missing ServerID");
+        return;
+    }
+    await ServerAPI.setGameSessionStatusForServer(req.body.server_id,"Available");
+});
+
+exports.SetServerGamesessionPending = onRequest({region:GCloudRegion},async(req,res)=>{    
+        
+    if(req.body.server_id === undefined){
+        res.status(401).send("Missing ServerID");
+        return;
+    }
+    await ServerAPI.setGameSessionStatusForServer(req.body.server_id,"Starting");
+
+})
+
+exports.SetServerUsed = onRequest({region:GCloudRegion},async (req,res) =>{
+       
+    if(req.body.server_id === undefined){
+        res.status(401).send("Missing ServerID");
+        return;
+    }
+
+    await ServerAPI.setGameSessionStatusForServer(req.body.server_id,"Started");
+    
+});
+
+exports.SetServerShutdown = onRequest({region:GCloudRegion},async (req,res) =>{
+    if(req.body.server_id === undefined){
+        res.status(401).send("Missing ServerID");
+        return;
+    }
+    await ServerAPI.setGameSessionStatusForServer(req.body.server_id,"Closed");
+    await ServerAPI.stopServer(req.body.server_id);
+});
+
 exports.GameLiftSearchSessions = onRequest({region:GCloudRegion},async(req,res)=>{
 
     const SearchInput = {
         FleetId:FleetID,
         Location:Location,
     };
-    const command = new SearchGameSessionsCommand(SearchInput);
-    await executeCommand(res,command);
+    //const command = new SearchGameSessionsCommand(SearchInput);
+    //await executeCommand(res,command);
+
+    const gameSessionDocs = await db.collection("GameSessions").where('type',"==","PlacementFulfilled").get();
+
+    let sessions = {
+        GameSessions:[]
+    };
+    Timestamp.now().toMillis;
+    for (let i = 0; i < gameSessionDocs.size; i++) {
+        const element = gameSessionDocs.docs[i];
+        let time = 0;
+        if(element.get('Time') !== undefined){
+            time = element.get('Time').toMillis();
+        }
+        sessions.GameSessions.push({
+            Time:time,
+            CreationTime:element.get('endTime'),
+            GameSessionId:element.get('GameSessionId'),
+            IpAddress:element.get('ipAddress'),
+            Port:element.get('port'),
+            Name:element.get('Name'),
+        });
+    }
+    res.status(200).send(sessions);
     return;
 });
 
@@ -46,9 +112,211 @@ exports.GameLiftCloseGameSession = onRequest({region:GCloudRegion},async (req, r
         GameSessionId: req.body.GameSessionId, // required
         TerminationMode: "TRIGGER_ON_PROCESS_TERMINATE", // required
     };
+    const docs = await db.collection("GameSessions").where("gameSessionArn","==",input.GameSessionId).get();
+    for(let i = 0; i < docs.size; i++){
+        await docs.docs[i].ref.delete();
+    }
     const command = new TerminateGameSessionCommand(input);
     await executeCommand(res,command);
 });
+
+
+exports.GameLiftQueueGameSession = onRequest({region:GCloudRegion},async (req,res) =>{
+    if(req.body.SessionName === undefined){
+        res.status(401).send("Missing SessionName");
+        return;
+    }
+    if(req.body.PlacementId === undefined){
+        res.status(401).send("Missing PlacementId");
+        return;
+    }
+    const input = {
+        PlacementId:req.body.PlacementId,
+        GameSessionQueueName: "<your-placement-queue>",
+        MaximumPlayerSessionCount: Number(2),
+        GameSessionName:req.body.SessionName
+    };
+    let serverID = await ServerAPI.startServerIfNeeded(appID,locationSettingsId);
+
+    if(serverID.available == 0){
+        if(serverID.serverCreated == false && serverID.started.length == 0){
+            res.status(500).send("maximum-running-instances"); 
+            return;
+        }
+        await tryUntil(result => result == true,async (s)=>{
+            let availableServerIds = await ServerAPI.getAvailableServerIdsForApp(ServerAPI.appID,false);
+            if(availableServerIds.readyForGameSession.length >= 1){
+                return true;
+            }
+            return false;
+        },5000,120000,serverID);
+    }
+    const command = new StartGameSessionPlacementCommand(input);
+
+    const dbEntry = {
+        placementId: input.PlacementId,
+        type: "PlacementStarted",
+        Name:input.GameSessionName,
+        startTime:Timestamp.now(),
+        Time:Timestamp.now(),
+    }
+    await db.collection('GameSessions').doc(input.PlacementId).create(dbEntry);
+    
+    let result = await executeCommand(res,command,false);
+    console.log(result);
+    res.status(200).send(result); 
+    return;
+});
+
+exports.StartFlexMatch = onRequest({region:GCloudRegion},async (req,res)=>{
+    if(req.body.PlayerData === undefined){
+        res.status(401).send("Missing Playerdata");
+        return;
+    }
+    if(req.body.Config === undefined){
+        res.status(401).send("Missing Configuration");
+        return;
+    }
+    const input = {
+        ConfigurationName:req.body.Config,
+        Players: req.body.PlayerData
+    };
+    const command = new StartMatchmakingCommand(input);
+    await executeCommand(res,command);
+});
+
+
+exports.MatchmakingPlacement = onRequest({region:GCloudRegion},async (req,res)=>{
+    const snsBody = JSON.parse(req.body);
+    console.log(snsBody);
+    const message = JSON.parse(snsBody.Message);
+    const detail = message.detail;
+    switch (detail.type) {
+        case "MatchmakingSearching":
+            var Tickets = detail.tickets;
+            for(let i = 0; i < Tickets.length; i++){
+                let element = Tickets[i];
+                element.Status = "SEARCHING";
+                element.timestamp = Timestamp.now();
+                await db.collection('Matchmaking').doc(element.ticketId).create(element);
+            }
+            break;
+
+        case "PotentialMatchCreated":
+            var Tickets = detail.tickets;
+            for(let i = 0; i < Tickets.length; i++){
+                let element = Tickets[i];
+                element.Status = "POTENTIAL_MATCH";
+                element.timestamp = Timestamp.now();
+                element.matchId = detail.matchId;
+                element.acceptanceRequired = detail.acceptanceRequired;
+                if(detail.acceptanceRequired == true){
+                    await db.collection('Matchmaking').doc(element.ticketId).update(element);
+                }                
+            }
+            break;
+
+        case "MatchmakingSucceeded":
+            var Tickets = detail.tickets;
+            var gamesessionInfo = detail.gameSessionInfo;
+            for(let i = 0; i < Tickets.length; i++){
+                var element = Tickets[i];
+                element.Status = "MATCHMAKING_SUCCESSFULL";
+                element.timestamp = Timestamp.now();
+                element.matchId = detail.matchId;
+                element.ipAddress = gamesessionInfo.ipAddress;
+                element.port = gamesessionInfo.port;
+                element.gameSessionArn = gamesessionInfo.gameSessionArn;
+                await db.collection('Matchmaking').doc(element.ticketId).update(element);
+            }
+
+            break;
+
+        case "MatchmakingTimedOut":
+            var Tickets = detail.tickets;
+            for(let i = 0; i < Tickets.length; i++){
+                var element = Tickets[i];
+                element.Status = "TIMEOUT";
+                element.timestamp = Timestamp.now();
+                await db.collection('Matchmaking').doc(element.ticketId).update(element);
+            }
+            break;
+        case "MatchmakingCancelled":
+            var Tickets = detail.tickets;
+            for(let i = 0; i < Tickets.length; i++){
+                var element = Tickets[i];
+                element.Status = "CANCELLED";
+                element.timestamp = Timestamp.now();
+                await db.collection('Matchmaking').doc(element.ticketId).update(element);
+            }
+        default:
+            break;
+    }
+    return res.status(200).send("ok");
+});
+
+exports.GameLiftStopMatchmaking = onRequest({region:GCloudRegion},async (req, res)=>{
+        if(req.body.TickeId === undefined){
+        res.status(401).send("Missing TicketId");
+        return;
+    }
+    const input = {
+        TicketId:req.body.TickeId,
+    };
+    const command = new StopMatchmakingCommand(input);
+    await executeCommand(res,command);
+});
+
+
+exports.GameLiftGameSessionQueued = onRequest({region:GCloudRegion},async (req,res)=>{
+    const snsBody = JSON.parse(req.body);
+    console.log(req.body);
+
+    if(snsBody.Type === "SubscriptionConfirmation"){
+        console.log('SubscriptionConfirmation')
+        return res.status(200).send("ok");
+    }
+    console.log(`Typ:${snsBody.Type}`);
+    if(snsBody.Type === 'Notification'){
+        console.log('Notification');
+        const message = JSON.parse(snsBody.Message);
+        console.log(`MSG:${JSON.stringify(message)}`);
+        var details = message.detail;
+        console.log(`Detail:${details}`);
+        if(details.type === "PlacementFulfilled"){
+            details.Time = Timestamp.now();
+            const input = { // DescribeGameSessionPlacementInput
+                PlacementId: details.placementId, // required
+            };
+            const command = new DescribeGameSessionPlacementCommand(input);
+                try {
+                    const response = await gameLiftClient.send(command);
+                    details.GameSessionId = response.GameSessionPlacement.GameSessionId;
+                    details.Name = response.GameSessionPlacement.GameSessionName;
+                    details.GameSessionArn = response.GameSessionPlacement.GameSessionArn;
+                    details.CreationTime = response.GameSessionPlacement.EndTime;
+                    details.MaximumPlayerSessionCount = response.GameSessionPlacement.MaximumPlayerSessionCount;
+                    await db.collection('GameSessions').doc(details.placementId).update(details);
+                    res.status(200).send(response); 
+                    return;
+                } catch (error) {
+                    console.error(error);
+                    if(error instanceof FleetCapacityExceededException){
+                        res.status(403).send("FleetCapacityExceededException");
+                    }else{
+                        res.status(400).send("An error occured");
+                    }
+                    return;
+                }
+            
+           //await db.ref(`GameSession/${details.placementId}`).update(details);
+        }else if(details.type === "PlacementTimedOut"){
+            await db.collection('GameSessions').doc(details.placementId).update(details);
+        }
+    }
+    return res.status(200).send("ok");
+});
+
 
 exports.GameLiftCreateGameSession = onRequest({region:GCloudRegion},async (req,res)=>{
     if(req.body.CreatorId === undefined){
@@ -67,16 +335,60 @@ exports.GameLiftCreateGameSession = onRequest({region:GCloudRegion},async (req,r
         Name:req.body.SessionName,
         MaximumPlayerSessionCount:Number(2),
     };
+    let serverID = await ServerAPI.startServerIfNeeded();
+    await tryUntil(result => result == true,async ()=>{
+        let doc = await db.collection("Servers").doc(serverID).get();
+        if(doc.get("status") =="Idle"){
+            return true;
+        }
+        return false;
+    },5000,120000);
     const command = new CreateGameSessionCommand(input);
-    await executeCommand(res,command);
+    let commandresult = await executeCommand(res,command,false);
+    commandresult.server = serverID;
     return;
 });
 
-async function executeCommand(res,command){
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+async function tryUntil(condition, task, interval, timeout,param){
+      const start = Date.now();
+
+  while (true) {
+    console.log("param: "+param);
+    const result = await task(param);
+
+    if (condition(result)) {
+      return result; // done
+    }
+
+    if (Date.now() - start > timeout) {
+      throw new Error("Timeout reached");
+    }
+
+    await sleep(interval);
+  }
+}
+
+async function isServerAvailable(){
+    const availableServers = await db.collection("Servers").where("status","==","Idle").get();
+    if(availableServers.empty){
+        ServerAPI.startServerIfNeeded()
+    }
+}
+
+async function executeCommand(res,command,sendOkStatus){
     try {
         const response = await gameLiftClient.send(command);
-        res.status(200).send(response); 
-        return;
+        if(sendOkStatus){
+            res.status(200).send(response); 
+            return;
+        }else{
+            return response;
+        }
+        
+        
     } catch (error) {
         console.error(error);
         if(error instanceof FleetCapacityExceededException){
@@ -87,7 +399,7 @@ async function executeCommand(res,command){
         return;
     }
 }
-async function createPlayerSession(GameSessionId,PlayerId,PlayerData){
+async function createPlayerSession(res,GameSessionId,PlayerId,PlayerData){
     var input = {
         GameSessionId: GameSessionId, 
         PlayerId: PlayerId, 
@@ -95,10 +407,40 @@ async function createPlayerSession(GameSessionId,PlayerId,PlayerData){
     if(PlayerData !== undefined){
         input.PlayerData = PlayerData;
     }
-    const command = new CreateGameSessionCommand(input);
+    const command = new CreatePlayerSessionCommand(input);
     await executeCommand(res,command);
     return;
 }
+
+exports.GameLiftCheckMatchmakingTicket = onRequest({region:GCloudRegion},async(req,res) =>{
+
+    if(req.body.TicketIds == undefined){
+        res.status(403).send("Missing TicketIds");
+        return;
+    }
+    if(req.body.TicketIds.length == 0){
+        res.status(403).send("No TicketIds");
+        return;
+    }
+    const ticketIds = req.body.TicketIds;
+    const TicketPromises = [];
+    for(let i = 0; i < ticketIds.length; i++){
+        TicketPromises.push(db.collection('Matchmaking').doc(ticketIds[i]).get());
+    }
+    let Tickets = await Promise.all(TicketPromises);
+    let result = {TicketList:[]};
+    for (let i = 0; i < Tickets.length; i++) {
+        const element = Tickets[i];
+        result.TicketList.push(element.data())
+    }
+    return res.status(200).send(result); 
+    
+    /*var input = {
+        TicketIds:req.body.TicketIds
+    };
+    const command = new DescribeMatchmakingCommand(input);
+    await executeCommand(res,command);*/
+});
 
 exports.GameLiftCreatePlayerSession = onRequest({region:GCloudRegion},async (req,res)=>{
     if(req.body.PlayerID == undefined){
@@ -109,6 +451,6 @@ exports.GameLiftCreatePlayerSession = onRequest({region:GCloudRegion},async (req
         res.status(402).send("Missing GameSessionID");
         return;
     }
-    await createPlayerSession(req.body.GameSessionId, req.body.PlayerID,req.body.PlayerData);
+    await createPlayerSession(res,req.body.GameSessionId, req.body.PlayerID,req.body.PlayerData);
 });
 

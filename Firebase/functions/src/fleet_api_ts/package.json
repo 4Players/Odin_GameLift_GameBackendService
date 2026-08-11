@@ -1,0 +1,17 @@
+{
+  "name": "@reneup9/odin_fleet_api",
+  "version": "0.9.3",
+  "private": true,
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "superagent": "^5.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
